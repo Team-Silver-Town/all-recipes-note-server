@@ -13,7 +13,7 @@ class MenuService {
 
   async createNewMenu(category_id, menuName) {
     const menu = this.menuModel.find({ name: menuName.trim() });
-    const category = await Category.findById(category_id).lean();
+    const category = await Category.findById(category_id);
 
     if (menu) return;
 
@@ -21,9 +21,9 @@ class MenuService {
 
     mongoSession.startTransaction();
 
-    await this.menuModel.create({ name: menuName });
+    await this.menuModel.create({ name: menuName }, { session: mongoSession });
     category.menus.push(this.menuModel);
-    await category.save();
+    await category.save({ session: mongoSession });
 
     await mongoSession.commitTransaction();
     mongoSession.endSession();
