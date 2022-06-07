@@ -11,7 +11,6 @@ const asyncCatcher = require("../utils/asyncCatcher");
 const UserService = require("../services/UserService");
 
 exports.authenticate = asyncCatcher(async (req, res, next) => {
-
   // token 받아오기
   const authToken = req.headers.authorization;
 
@@ -40,10 +39,13 @@ exports.authenticate = asyncCatcher(async (req, res, next) => {
 
   // firebaseUser 정보기반으로 DB에서 user 정보 받아오기
 
-  let user = await UserService.FindUser({ email: firebaseUser.email });
+  let user = await UserService.findUser({ email: firebaseUser.email });
 
   if (!user) {
-    user = await UserService.CreateUser(firebaseUser.email, firebaseUser.nickname);
+    user = await UserService.createUser(
+      firebaseUser.email,
+      firebaseUser.nickname,
+    );
   }
 
   req.user = user;
