@@ -1,3 +1,5 @@
+const createError = require("http-errors");
+
 const {
   INVALID_TOKEN,
   TOKEN_DOES_NOT_EXIST,
@@ -29,4 +31,12 @@ const errorHandler = (err, req, res, next) => {
   res.status(200).json({ success: false, message: "server error" });
 };
 
-module.exports = errorHandler;
+const initiateErrorHandler = (app) => {
+  app.use(function (req, res, next) {
+    next(createError(404));
+  });
+
+  app.use(errorHandler);
+};
+
+module.exports = initiateErrorHandler;
