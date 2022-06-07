@@ -24,11 +24,11 @@ const errorHandler = (err, req, res, next) => {
 
     case "MongoServerError":
       return res
-        .status(200)
+        .status(500)
         .json({ success: false, message: "Could not save data" });
   }
 
-  res.status(200).json({ success: false, message: "server error" });
+  res.status(500).json({ success: false, message: "server error" });
 };
 
 const initiateErrorHandler = (app) => {
