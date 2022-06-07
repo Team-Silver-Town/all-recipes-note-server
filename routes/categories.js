@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const categoryController = require("./controllers/category.controller");
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
+router.get("/", categoryController.getCategories);
+router.get("/:category_id", categoryController.getCategory);
 
 module.exports = router;
