@@ -4,6 +4,8 @@ const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
+const envKeys = require("./config/config");
 
 const usersRouter = require("./routes/users");
 const recipesRouter = require("./routes/recipes");
@@ -14,7 +16,17 @@ const menusRouter = require("./routes/menus");
 const ingredientsRouter = require("./routes/ingredients");
 const unitsRouter = require("./routes/units");
 
+const db = require("./db/mongo");
+db.connect();
+
 const app = express();
+
+app.use(
+  cors({
+    origin: [envKeys.FRONTEND_URL],
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+  }),
+);
 
 app.use(logger("dev"));
 app.use(express.json());
