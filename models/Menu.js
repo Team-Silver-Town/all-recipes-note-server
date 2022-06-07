@@ -5,12 +5,6 @@ const menuSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  recipes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Recipe",
-    },
-  ],
 });
 
 module.exports = mongoose.model("Menu", menuSchema);
