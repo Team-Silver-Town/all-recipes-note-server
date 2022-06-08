@@ -5,6 +5,7 @@ const recipeSchema = new mongoose.Schema(
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     youtubeUrl: {
       type: String,
@@ -17,6 +18,7 @@ const recipeSchema = new mongoose.Schema(
     belongsToMenu: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Menu",
+      required: true,
     },
     notes: [
       {
