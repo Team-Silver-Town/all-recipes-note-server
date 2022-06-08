@@ -1,15 +1,15 @@
 const UserService = require("../../services/UserService");
 
 exports.findUser = async (req, res, next) => {
-  const { query } = req;
-  const user = await UserService.findUser(query);
+  const { email } = req.query;
+  const user = await UserService.findUser({ email });
 
   return res.send(user);
 };
 
 exports.createUser = async (req, res, next) => {
-  const userInfo = req.body;
-  const user = await UserService.createUser(userInfo);
+  const { nickname, email } = req.body;
+  const user = await UserService.createUser({ nickname, email });
 
   return res.send(user);
 };
