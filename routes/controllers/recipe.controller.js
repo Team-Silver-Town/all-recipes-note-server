@@ -3,20 +3,33 @@ const RecipeService = require("../../services/RecipeService");
 exports.createRecipe = async (req, res, next) => {
   const newRecipe = req.body;
 
-  await RecipeService.createNewRecipe(newRecipe);
+  try {
+    await RecipeService.createNewRecipe(newRecipe);
 
-  return res.status(200).send("success");
+    return res.status(200).send("success");
+  } catch (error) {
+    //TODO: handle error
+  }
 };
 
 exports.getRecipes = async (req, res, next) => {
-  const recipes = await RecipeService.getAllRecipes();
+  try {
+    const recipes = await RecipeService.getAllRecipes();
 
-  return res.status(200).send(recipes);
+    return res.status(200).send(recipes);
+  } catch (error) {
+    //TODO: handle error
+  }
 };
 
 exports.getRecipe = async (req, res, next) => {
   const { youtubeUrl } = req.body;
-  const recipe = await RecipeService.getRecipe(youtubeUrl);
 
-  return res.status(200).send(recipe);
+  try {
+    const recipe = await RecipeService.getRecipe(youtubeUrl);
+
+    return res.status(200).send(recipe);
+  } catch (error) {
+    //TODO: handle error
+  }
 };

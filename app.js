@@ -10,13 +10,6 @@ const app = express();
 
 initiateMiddlewares(app);
 initiateRouters(app);
-// app.use(express.static("/all-recipes-note-client/build"));
-// app.get("*", (req, res) => {
-//   res.sendFile(
-//     path.join(__dirname, "../all-recipes-note-client/build/index.html"),
-//   );
-// });
-
 initiateErrorHandler(app);
 
 module.exports = app;
