@@ -13,7 +13,7 @@ class UserService {
     return await this.userModel.create(query);
   }
 
-  async patchUser({ nickname, email }) {
+  async updateUser({ nickname, email }) {
     return await this.userModel.findOneAndUpdate({ email }, { nickname });
   }
 }
