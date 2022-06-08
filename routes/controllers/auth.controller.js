@@ -13,3 +13,10 @@ exports.createUser = async (req, res, next) => {
 
   return res.send(user);
 };
+
+exports.patchUser = async (req, res, next) => {
+  const { nickname, email } = req.body;
+  const user = await UserService.updateUser({ nickname, email });
+
+  return res.send(user);
+};
