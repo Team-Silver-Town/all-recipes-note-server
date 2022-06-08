@@ -2,6 +2,7 @@ const express = require("express");
 const initiateMiddlewares = require("./loaders/middleware");
 const initiateRouters = require("./loaders/router");
 const initiateErrorHandler = require("./loaders/errorHandler");
+// const path = require("path");
 const db = require("./loaders/mongo");
 db.connect();
 

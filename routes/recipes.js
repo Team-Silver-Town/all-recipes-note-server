@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const recipeController = require("./controllers/recipe.controller");
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
+router.get("/", recipeController.getRecipes);
+router.post("/new", recipeController.createRecipe);
+router.get("/:recipe_id", recipeController.getRecipe);
 
 module.exports = router;

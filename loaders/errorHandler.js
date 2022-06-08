@@ -8,6 +8,7 @@ const {
 } = require("../constants/ErrorConstants");
 
 const errorHandler = (err, req, res, next) => {
+  console.log(err);
   const error = { ...err, name: err.name, message: err.message };
 
   switch (error.name) {
