@@ -6,6 +6,7 @@ const categoriesRouter = require("../routes/categories");
 const menusRouter = require("../routes/menus");
 const ingredientsRouter = require("../routes/ingredients");
 const unitsRouter = require("../routes/units");
+const authRouter = require("../routes/auth");
 
 const initiateRouters = (app) => {
   app.use("/api/users", usersRouter);
@@ -16,6 +17,7 @@ const initiateRouters = (app) => {
   app.use("/api/menus", menusRouter);
   app.use("/api/ingredients", ingredientsRouter);
   app.use("/api/units", unitsRouter);
+  app.use("/api/auth", authRouter);
 };
 
 module.exports = initiateRouters;

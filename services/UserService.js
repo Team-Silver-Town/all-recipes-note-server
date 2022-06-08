@@ -9,8 +9,8 @@ class UserService {
     return await this.userModel.findOne(query).lean();
   }
 
-  async createUser(email, nickname) {
-    return await this.userModel.create({ email, nickname });
+  async createUser(query) {
+    return await this.userModel.create(query);
   }
 }
 
