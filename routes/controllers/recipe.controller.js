@@ -8,7 +8,7 @@ exports.createRecipe = async (req, res, next) => {
 
     return res.status(200).send("success");
   } catch (error) {
-    //TODO: handle error
+    console.log(error);
   }
 };
 
@@ -17,9 +17,7 @@ exports.getRecipes = async (req, res, next) => {
     const recipes = await RecipeService.getAllRecipes();
 
     return res.status(200).send(recipes);
-  } catch (error) {
-    //TODO: handle error
-  }
+  } catch (error) {}
 };
 
 exports.getRecipe = async (req, res, next) => {
