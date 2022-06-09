@@ -7,6 +7,7 @@ class CategoryService {
 
   async getAllCategories() {
     const categories = await this.categoryModel.find().populate("menus").lean();
+
     return categories;
   }
 
@@ -15,6 +16,7 @@ class CategoryService {
       .findById(category_id)
       .populate("menus")
       .lean();
+
     return category;
   }
 }

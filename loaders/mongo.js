@@ -9,6 +9,10 @@ const handleError = (error) =>
 exports.connect = async () => {
   try {
     await mongoose.connect(envKeys.MONGO_DB_URL);
+    require("../models/Menu");
+    require("../models/Recipe");
+    require("../models/Note");
+    require("../models/Tip");
   } catch (error) {
     handleError(error);
   }

@@ -1,8 +1,9 @@
+const mongoose = require("mongoose");
 const Recipe = require("../models/Recipe");
 const Menu = require("../models/Menu");
 const User = require("../models/User");
-const mongoose = require("mongoose");
 const Category = require("../models/Category");
+const Note = require("../models/Note");
 
 class RecipeService {
   constructor(recipeModel) {
@@ -17,9 +18,9 @@ class RecipeService {
     categoryName,
   }) {
     const user = await User.findOne({ email });
-    let isNewMenu = false;
     let menu = await Menu.findOne({ name: menuName.trim() });
     const category = await Category.findOne({ name: categoryName });
+    let isNewMenu = false;
 
     if (!menu) {
       isNewMenu = true;
@@ -41,13 +42,21 @@ class RecipeService {
       tips: [],
     });
 
+    const createdNote = new Note({
+      creator: user._id,
+      relatedRecipe: createdRecipe._id,
+    });
+
+    isNewMenu && category.menus.push(menu._id);
+    createdRecipe.notes.push(createdNote);
+    user.recipes.push(createdRecipe);
+    menu.recipes.push(createdRecipe);
+
     const mongoSession = await mongoose.startSession();
     mongoSession.startTransaction();
 
+    await createdNote.save({ session: mongoSession });
     await createdRecipe.save({ session: mongoSession });
-    isNewMenu && category.menus.push(menu._id);
-    user.recipes.push(createdRecipe);
-    menu.recipes.push(createdRecipe);
     await user.save({ session: mongoSession });
     await category.save({ session: mongoSession });
     await menu.save({ session: mongoSession });
@@ -63,11 +72,17 @@ class RecipeService {
       .populate("belongsToMenu")
       .lean();
 
-    return allRecipes.slice(0, 5);
+    return allRecipes;
   }
 
-  async getRecipe(youtubeUrl) {
-    const recipe = await this.recipeModel.find({ youtubeUrl });
+  async getRecipe(recipeId) {
+    const recipe = await this.recipeModel
+      .findById(recipeId)
+      .populate("postedBy")
+      .populate("belongsToMenu")
+      .populate("notes")
+      .populate("tips")
+      .lean();
 
     return recipe;
   }
