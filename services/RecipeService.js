@@ -80,7 +80,13 @@ class RecipeService {
       .findById(recipeId)
       .populate("postedBy")
       .populate("belongsToMenu")
-      .populate("notes")
+      .populate({
+        path: "notes",
+        populate: {
+          path: "creator",
+          model: "User",
+        },
+      })
       .populate("tips")
       .lean();
 

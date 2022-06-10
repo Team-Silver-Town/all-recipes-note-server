@@ -14,18 +14,7 @@ const noteSchema = new mongoose.Schema(
     },
     ingredients: [
       {
-        ingredient: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Ingredient",
-        },
-        portion: {
-          type: Number,
-          default: 0,
-        },
-        unit: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Unit",
-        },
+        type: String,
       },
     ],
     content: {

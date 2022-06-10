@@ -16,15 +16,17 @@ exports.createNote = async (req, res, next) => {
 
 exports.updateNote = async (req, res, next) => {
   const updatedData = req.body;
+  console.log(updatedData);
 
-  const note = await NoteService.updateNote(updatedData);
+  await NoteService.updateNote(updatedData);
 
-  return res.status(200).send(note);
+  return res.status(200).send("success");
 };
 
 exports.updateNotePopularity = async (req, res, next) => {
   const updatedData = req.body;
-  const note = await NoteService.updateNotePopularity(updatedData);
 
-  return res.status(200).send(note);
+  await NoteService.updateNotePopularity(updatedData);
+
+  return res.status(200).send("success");
 };
