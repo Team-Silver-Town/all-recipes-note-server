@@ -32,16 +32,16 @@ const recipeSchema = new mongoose.Schema(
         ref: "Tip",
       },
     ],
-    like: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    dislike: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
+    liked: [
+      {
+        type: String,
+      },
+    ],
+    disliked: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true },
 );
