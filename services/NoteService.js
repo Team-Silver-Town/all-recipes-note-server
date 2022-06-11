@@ -19,9 +19,9 @@ class NoteService {
     return allNotes;
   }
 
-  async getNotesByUserId(query) {
+  async getNotesByCreator(user_id) {
     const results = await this.noteModel
-      .find(query)
+      .find({ creator: user_id })
       .populate({
         path: "relatedRecipe",
         populate: {

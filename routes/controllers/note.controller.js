@@ -8,7 +8,7 @@ exports.getAllNotes = async (req, res, next) => {
 
 exports.getNotesByUserId = async (req, res, next) => {
   const { user_id } = req.params;
-  const notes = await NoteService.getNotesByUserId({ creator: user_id });
+  const notes = await NoteService.getNotesByCreator(user_id);
 
   return res.status(200).send(notes);
 };
