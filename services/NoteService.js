@@ -19,6 +19,21 @@ class NoteService {
     return allNotes;
   }
 
+  async getNotesByCreator(user_id) {
+    const results = await this.noteModel
+      .find({ creator: user_id })
+      .populate({
+        path: "relatedRecipe",
+        populate: {
+          path: "belongsToMenu",
+          model: "Menu",
+        },
+      })
+      .lean();
+
+    return results;
+  }
+
   async createNewNote({
     email,
     relatedRecipe,

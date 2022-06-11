@@ -6,6 +6,13 @@ exports.getAllNotes = async (req, res, next) => {
   return res.status(200).send(notes);
 };
 
+exports.getNotesByUserId = async (req, res, next) => {
+  const { user_id } = req.params;
+  const notes = await NoteService.getNotesByCreator(user_id);
+
+  return res.status(200).send(notes);
+};
+
 exports.createNote = async (req, res, next) => {
   const newNote = req.body;
 
