@@ -22,7 +22,6 @@ exports.getRecipe = async (req, res, next) => {
 };
 
 exports.updateRecipeLike = async (req, res, next) => {
-  console.log("UPDATE!!!!!!");
   const { email, recipe_id, like } = req.body;
 
   await RecipeService.updateRecipeLike({ email, recipe_id, like });
