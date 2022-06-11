@@ -62,6 +62,7 @@ class NoteService {
 
     user.notes.push(createdNote);
     recipe.notes.push(createdNote);
+    await createdNote.save({ session: mongoSession });
     await user.save({ session: mongoSession });
     await recipe.save({ session: mongoSession });
 
@@ -70,7 +71,7 @@ class NoteService {
   }
 
   async updateNote({ note_id, ingredients, content, visibility }) {
-    const note = await Note.findById(note_id);
+    const note = await this.noteModel.findById(note_id);
 
     const mongoSession = await mongoose.startSession();
     mongoSession.startTransaction();
@@ -92,7 +93,7 @@ class NoteService {
   }
 
   async updateNotePopularity({ email, note_id, like }) {
-    const note = await Note.findById(note_id);
+    const note = await this.noteModel.findById(note_id);
 
     if (like === "like") {
       note.liked.push(email);

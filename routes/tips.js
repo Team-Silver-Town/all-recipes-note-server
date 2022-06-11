@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const tipController = require("./controllers/tip.controller");
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
+router.get("/", tipController.getTips);
+router.post("/", tipController.createTip);
+router.patch("/:tip_id", tipController.updateTip);
+router.patch("/:tip_id/likes", tipController.updateTipLike);
+router.patch("/:tip_id/unlikes", tipController.cancelTipLike);
+router.delete("/:tip_id", tipController.deleteTip);
 
 module.exports = router;

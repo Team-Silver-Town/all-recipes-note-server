@@ -23,7 +23,6 @@ exports.createNote = async (req, res, next) => {
 
 exports.updateNote = async (req, res, next) => {
   const updatedData = req.body;
-  console.log(updatedData);
 
   await NoteService.updateNote(updatedData);
 
