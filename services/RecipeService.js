@@ -92,6 +92,12 @@ class RecipeService {
 
     return recipe;
   }
+
+  async getRecipesByListArray(idListArray) {
+    const results = await this.recipeModel.find({ _id: { $in: idListArray } });
+
+    return results;
+  }
 }
 
 module.exports = new RecipeService(Recipe);
