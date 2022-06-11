@@ -35,6 +35,7 @@ class RecipeService {
 
     const createdRecipe = new Recipe({
       postedBy: user._id,
+      relatedMenu: menu.name,
       youtubeUrl,
       thumbnailUrl,
       belongsToMenu: menu._id,
