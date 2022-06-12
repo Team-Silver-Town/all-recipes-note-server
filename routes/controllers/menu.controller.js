@@ -6,6 +6,12 @@ exports.getMenus = async (req, res, next) => {
   return res.status(200).send(menus);
 };
 
+exports.getTop5Menus = async (req, res, next) => {
+  const menus = await MenuService.getTop5Menus();
+
+  return res.status(200).send(menus);
+};
+
 exports.createMenu = async (req, res, next) => {
   const { category_id, menuName } = req.body;
 
