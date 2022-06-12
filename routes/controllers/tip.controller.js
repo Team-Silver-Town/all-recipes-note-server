@@ -11,7 +11,7 @@ exports.getTopTenTips = async (req, res, next) => {
 
   return res.status(200).send(topTenTips);
 };
-  
+
 exports.getTipsByRecipeId = async (req, res, next) => {
   const { recipe_id } = req.params;
   const tipsByRecipeId = await TipService.getTipsByRecipeId({ recipe_id });
@@ -28,9 +28,11 @@ exports.createTip = async (req, res, next) => {
 };
 
 exports.updateTip = async (req, res, next) => {
-  const updatedData = req.body;
+  const { tip_id, content } = req.body;
 
-  await TipService.updateTip(updatedData);
+  console.log(tip_id, content);
+
+  await TipService.updateTip({ tip_id, content });
 
   return res.status(200).send("success");
 };

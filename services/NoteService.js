@@ -3,7 +3,6 @@ const User = require("../models/User");
 const Recipe = require("../models/Recipe");
 const Note = require("../models/Note");
 const { handleIngredientsData } = require("../utils/mongooseUtils");
-const res = require("express/lib/response");
 
 class NoteService {
   constructor(noteModel) {
@@ -134,6 +133,44 @@ class NoteService {
     }
 
     await note.save();
+  }
+  
+  async cancelNoteLike({ email, note_id, like }) {
+    const note = await this.noteModel.findById(note_id);
+
+    if (like === "like") {
+      const index = note.liked.indexOf(email);
+
+      note.liked.splice(index, 1);
+    } else {
+      const index = note.disliked.indexOf(email);
+
+      note.disliked.splice(index, 1);
+    }
+
+    await note.save();
+  }
+
+  async deleteNote({ note_id }) {
+    const note = await this.noteModel.findById(note_id);
+    const user = await User.findById(note.creator._id);
+    const recipe = await Recipe.findById(note.relatedRecipe._id);
+
+    const indexUser = user.notes.indexOf(note._id);
+    const indexRecipe = recipe.notes.indexOf(note._id);
+
+    user.notes.splice(indexUser, 1);
+    recipe.notes.splice(indexRecipe, 1);
+
+    const mongoSession = await mongoose.startSession();
+    mongoSession.startTransaction();
+
+    await this.noteModel.deleteOne({ _id: note_id }, { session: mongoSession });
+    await user.save({ session: mongoSession });
+    await recipe.save({ session: mongoSession });
+
+    await mongoSession.commitTransaction();
+    mongoSession.endSession();
   }
 }
 

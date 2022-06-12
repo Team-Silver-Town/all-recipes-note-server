@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Recipe = require("../models/Recipe");
 const Tip = require("../models/Tip");
-const Note = require("../models/Note");
 
 class TipService {
   constructor(tipModel) {
@@ -50,7 +49,7 @@ class TipService {
 
     return results;
   }
-  
+
   async getTipsByRecipeId({ recipe_id }) {
     const tipsByRecipeId = await this.tipModel
       .find({ relatedRecipe: recipe_id })
