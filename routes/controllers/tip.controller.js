@@ -6,6 +6,13 @@ exports.getTips = async (req, res, next) => {
   return res.status(200).send(tips);
 };
 
+exports.getTipsByRecipeId = async (req, res, next) => {
+  const { recipe_id } = req.params;
+  const tipsByRecipeId = await TipService.getTipsByRecipeId({ recipe_id });
+
+  return res.status(200).send(tipsByRecipeId);
+};
+
 exports.createTip = async (req, res, next) => {
   const newTip = req.body;
 
@@ -23,9 +30,9 @@ exports.updateTip = async (req, res, next) => {
 };
 
 exports.updateTipLike = async (req, res, next) => {
-  const updatedData = req.body;
+  const { email, tip_id, like } = req.body;
 
-  await TipService.updateTipLike(updatedData);
+  await TipService.updateTipLike({ email, tip_id, like });
 
   return res.status(200).send("success");
 };
@@ -39,7 +46,7 @@ exports.cancelTipLike = async (req, res, next) => {
 };
 
 exports.deleteTip = async (req, res, next) => {
-  const { tip_id } = req.body;
+  const { tip_id } = req.params;
 
   await TipService.deleteTip({ tip_id });
 

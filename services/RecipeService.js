@@ -66,6 +66,34 @@ class RecipeService {
     mongoSession.endSession();
   }
 
+  async updateRecipeLike({ email, recipe_id, like }) {
+    const recipe = await this.recipeModel.findById(recipe_id);
+
+    if (like === "like") {
+      recipe.liked.push(email);
+    } else {
+      recipe.disliked.push(email);
+    }
+
+    await recipe.save();
+  }
+
+  async cancelRecipeLike({ email, recipe_id, like }) {
+    const recipe = await this.recipeModel.findById(recipe_id);
+
+    if (like === "like") {
+      const index = recipe.liked.indexOf(email);
+
+      recipe.liked.splice(index, 1);
+    } else {
+      const index = recipe.disliked.indexOf(email);
+
+      recipe.disliked.splice(index, 1);
+    }
+
+    await recipe.save();
+  }
+
   async getAllRecipes() {
     const allRecipes = await this.recipeModel
       .find()

@@ -6,6 +6,14 @@ exports.getAllNotes = async (req, res, next) => {
   return res.status(200).send(notes);
 };
 
+exports.getNote = async (req, res, next) => {
+  const { note_id } = req.params;
+
+  const note = await NoteService.getNote(note_id);
+
+  return res.status(200).send(note);
+};
+
 exports.getNotesByUserId = async (req, res, next) => {
   const { user_id } = req.params;
   const notes = await NoteService.getNotesByCreator(user_id);
@@ -29,10 +37,18 @@ exports.updateNote = async (req, res, next) => {
   return res.status(200).send("success");
 };
 
-exports.updateNotePopularity = async (req, res, next) => {
-  const updatedData = req.body;
+exports.updateNoteLike = async (req, res, next) => {
+  const { email, note_id, like } = req.body;
 
-  await NoteService.updateNotePopularity(updatedData);
+  await NoteService.updateNoteLike({ email, note_id, like });
+
+  return res.status(200).send("success");
+};
+
+exports.cancelNoteLike = async (req, res, next) => {
+  const { email, note_id, like } = req.body;
+
+  await NoteService.cancelNoteLike({ email, note_id, like });
 
   return res.status(200).send("success");
 };
