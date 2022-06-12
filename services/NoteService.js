@@ -37,17 +37,16 @@ class NoteService {
 
   async getTopTenNotes() {
     const results = await this.noteModel.aggregate([
+      { $match: { visibility: true } },
       {
         $project: {
           relatedRecipe: 1,
           creator: 1,
-          visibility: 1,
           updatedAt: 1,
           numberOfLikes: { $size: "$liked" },
           numberOfDislikes: { $size: "$disliked" },
         },
       },
-      { $match: { visibility: true } },
       { $sort: { numberOfLikes: -1, updatedAt: -1 } },
       { $limit: 10 },
     ]);
