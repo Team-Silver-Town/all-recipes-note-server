@@ -27,11 +27,11 @@ class TipService {
           relatedRecipe: 1,
           createdAt: 1,
           updatedAt: 1,
-          numgerOfLikes: { $size: "$liked" },
+          numberOfLikes: { $size: "$liked" },
           numberOfDislikes: { $size: "$disliked" },
         },
       },
-      { $sort: { numgerOfLikes: -1, updatedAt: -1 } },
+      { $sort: { numberOfLikes: -1, updatedAt: -1 } },
       { $limit: 10 },
     ]);
 
