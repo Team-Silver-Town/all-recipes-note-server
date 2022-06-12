@@ -19,16 +19,6 @@ class NoteService {
     return allNotes;
   }
 
-  async getNote(note_id) {
-    const note = await this.noteModel
-      .findById(note_id)
-      .populate("creator")
-      .populate("relatedRecipe")
-      .lean();
-
-    return note;
-  }
-
   async getNotesByCreator(user_id) {
     const results = await this.noteModel
       .find({ creator: user_id })
@@ -46,18 +36,17 @@ class NoteService {
 
   async getTopTenNotes() {
     const results = await this.noteModel.aggregate([
+      { $match: { visibility: true } },
       {
         $project: {
           relatedRecipe: 1,
           creator: 1,
-          visibility: 1,
           updatedAt: 1,
-          numgerOfLikes: { $size: "$liked" },
+          numberOfLikes: { $size: "$liked" },
           numberOfDislikes: { $size: "$disliked" },
         },
       },
-      { $match: { visibility: true } },
-      { $sort: { numgerOfLikes: -1, updatedAt: -1 } },
+      { $sort: { numberOfLikes: -1, updatedAt: -1 } },
       { $limit: 10 },
     ]);
 
@@ -94,9 +83,9 @@ class NoteService {
       mongoSession,
     );
 
-    const createdNote = await new Note({
+    const createdNote = await this.noteModel.create({
       creator: user._id,
-      relatedRecipe: recipe._id,
+      relatedRecipe,
       ingredients: ingredientsData,
       content,
       visibility,
@@ -123,6 +112,8 @@ class NoteService {
       mongoSession,
     );
 
+    console.log(ingredientsData);
+
     note.ingredients = ingredientsData;
     note.content = content;
     note.visibility = visibility;
@@ -132,7 +123,7 @@ class NoteService {
     mongoSession.endSession();
   }
 
-  async updateNoteLike({ email, note_id, like }) {
+  async updateNotePopularity({ email, note_id, like }) {
     const note = await this.noteModel.findById(note_id);
 
     if (like === "like") {
@@ -143,7 +134,7 @@ class NoteService {
 
     await note.save();
   }
-
+  
   async cancelNoteLike({ email, note_id, like }) {
     const note = await this.noteModel.findById(note_id);
 
