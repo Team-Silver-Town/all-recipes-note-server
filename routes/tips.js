@@ -5,6 +5,7 @@ const tipController = require("./controllers/tip.controller");
 router.get("/", tipController.getTips);
 router.get("/top10", tipController.getTopTenTips);
 router.post("/", tipController.createTip);
+router.get("/:recipe_id", tipController.getTipsByRecipeId);
 router.patch("/:tip_id", tipController.updateTip);
 router.patch("/:tip_id/likes", tipController.updateTipLike);
 router.patch("/:tip_id/unlikes", tipController.cancelTipLike);

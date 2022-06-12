@@ -20,6 +20,16 @@ class NoteService {
     return allNotes;
   }
 
+  async getNote(note_id) {
+    const note = await this.noteModel
+      .findById(note_id)
+      .populate("creator")
+      .populate("relatedRecipe")
+      .lean();
+
+    return note;
+  }
+
   async getNotesByCreator(user_id) {
     const results = await this.noteModel
       .find({ creator: user_id })
@@ -77,21 +87,21 @@ class NoteService {
     const user = await User.findOne({ email });
     const recipe = await Recipe.findById(relatedRecipe);
 
-    const mongoSession = await mongoose.startSession();
-    mongoSession.startTransaction();
-
     const ingredientsData = await handleIngredientsData(
       ingredients,
       mongoSession,
     );
 
-    const createdNote = await this.noteModel.create({
+    const createdNote = await new Note({
       creator: user._id,
-      relatedRecipe,
+      relatedRecipe: recipe._id,
       ingredients: ingredientsData,
       content,
       visibility,
     });
+
+    const mongoSession = await mongoose.startSession();
+    mongoSession.startTransaction();
 
     user.notes.push(createdNote);
     recipe.notes.push(createdNote);
@@ -114,8 +124,6 @@ class NoteService {
       mongoSession,
     );
 
-    console.log(ingredientsData);
-
     note.ingredients = ingredientsData;
     note.content = content;
     note.visibility = visibility;
@@ -125,13 +133,29 @@ class NoteService {
     mongoSession.endSession();
   }
 
-  async updateNotePopularity({ email, note_id, like }) {
+  async updateNoteLike({ email, note_id, like }) {
     const note = await this.noteModel.findById(note_id);
 
     if (like === "like") {
       note.liked.push(email);
     } else {
       note.disliked.push(email);
+    }
+
+    await note.save();
+  }
+
+  async cancelNoteLike({ email, note_id, like }) {
+    const note = await this.noteModel.findById(note_id);
+
+    if (like === "like") {
+      const index = note.liked.indexOf(email);
+
+      note.liked.splice(index, 1);
+    } else {
+      const index = note.disliked.indexOf(email);
+
+      note.disliked.splice(index, 1);
     }
 
     await note.save();

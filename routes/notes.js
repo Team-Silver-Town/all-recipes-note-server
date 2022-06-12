@@ -6,7 +6,10 @@ router.get("/", noteController.getAllNotes);
 router.get("/top10", noteController.getTopTenNotes);
 router.get("/:user_id", noteController.getNotesByUserId);
 router.post("/", noteController.createNote);
+router.get("/:note_id", noteController.getNote);
+router.get("/:user_id", noteController.getNotesByUserId);
 router.patch("/:note_id", noteController.updateNote);
-router.patch("/:note_id/likes", noteController.updateNotePopularity);
+router.patch("/:note_id/likes", noteController.updateNoteLike);
+router.patch("/:note_id/unlikes", noteController.cancelNoteLike);
 
 module.exports = router;

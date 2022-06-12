@@ -20,3 +20,19 @@ exports.getRecipe = async (req, res, next) => {
 
   return res.status(200).send(recipe);
 };
+
+exports.updateRecipeLike = async (req, res, next) => {
+  const { email, recipe_id, like } = req.body;
+
+  await RecipeService.updateRecipeLike({ email, recipe_id, like });
+
+  return res.status(200).send("success");
+};
+
+exports.cancelRecipeLike = async (req, res, next) => {
+  const { email, recipe_id, like } = req.body;
+
+  await RecipeService.cancelRecipeLike({ email, recipe_id, like });
+
+  return res.status(200).send("success");
+};

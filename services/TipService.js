@@ -50,6 +50,16 @@ class TipService {
 
     return results;
   }
+  
+  async getTipsByRecipeId({ recipe_id }) {
+    const tipsByRecipeId = await this.tipModel
+      .find({ relatedRecipe: recipe_id })
+      .populate("creator")
+      .populate("relatedRecipe")
+      .lean();
+
+    return tipsByRecipeId;
+  }
 
   async createNewTip({ email, relatedRecipe, content }) {
     const user = await User.findOne({ email });
