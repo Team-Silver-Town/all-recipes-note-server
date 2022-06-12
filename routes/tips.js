@@ -3,6 +3,7 @@ const router = express.Router();
 const tipController = require("./controllers/tip.controller");
 
 router.get("/", tipController.getTips);
+router.get("/top10", tipController.getTopTenTips);
 router.post("/", tipController.createTip);
 router.patch("/:tip_id", tipController.updateTip);
 router.patch("/:tip_id/likes", tipController.updateTipLike);

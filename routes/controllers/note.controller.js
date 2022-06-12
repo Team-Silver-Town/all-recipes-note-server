@@ -13,6 +13,12 @@ exports.getNotesByUserId = async (req, res, next) => {
   return res.status(200).send(notes);
 };
 
+exports.getTopTenNotes = async (req, res, next) => {
+  const topTenNotes = await NoteService.getTopTenNotes();
+
+  return res.status(200).send(topTenNotes);
+};
+
 exports.createNote = async (req, res, next) => {
   const newNote = req.body;
 
