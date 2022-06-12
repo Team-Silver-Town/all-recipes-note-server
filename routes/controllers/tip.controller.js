@@ -6,6 +6,12 @@ exports.getTips = async (req, res, next) => {
   return res.status(200).send(tips);
 };
 
+exports.getTopTenTips = async (req, res, next) => {
+  const topTenTips = await TipService.getTopTenTips();
+
+  return res.status(200).send(topTenTips);
+};
+  
 exports.getTipsByRecipeId = async (req, res, next) => {
   const { recipe_id } = req.params;
   const tipsByRecipeId = await TipService.getTipsByRecipeId({ recipe_id });

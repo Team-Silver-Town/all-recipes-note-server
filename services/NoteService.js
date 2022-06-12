@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Recipe = require("../models/Recipe");
 const Note = require("../models/Note");
 const { handleIngredientsData } = require("../utils/mongooseUtils");
+const res = require("express/lib/response");
 
 class NoteService {
   constructor(noteModel) {
@@ -40,6 +41,38 @@ class NoteService {
         },
       })
       .lean();
+
+    return results;
+  }
+
+  async getTopTenNotes() {
+    const results = await this.noteModel.aggregate([
+      {
+        $project: {
+          relatedRecipe: 1,
+          creator: 1,
+          visibility: 1,
+          updatedAt: 1,
+          numgerOfLikes: { $size: "$liked" },
+          numberOfDislikes: { $size: "$disliked" },
+        },
+      },
+      { $match: { visibility: true } },
+      { $sort: { numgerOfLikes: -1, updatedAt: -1 } },
+      { $limit: 10 },
+    ]);
+
+    await Note.populate(results, {
+      path: "relatedRecipe",
+      populate: {
+        path: "belongsToMenu",
+        model: "Menu",
+      },
+    });
+
+    await User.populate(results, {
+      path: "creator",
+    });
 
     return results;
   }

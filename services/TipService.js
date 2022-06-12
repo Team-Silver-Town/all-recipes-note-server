@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Recipe = require("../models/Recipe");
 const Tip = require("../models/Tip");
+const Note = require("../models/Note");
 
 class TipService {
   constructor(tipModel) {
@@ -18,6 +19,38 @@ class TipService {
     return allTips;
   }
 
+  async getTopTenTips() {
+    const results = await this.tipModel.aggregate([
+      {
+        $project: {
+          creator: 1,
+          content: 1,
+          relatedRecipe: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          numgerOfLikes: { $size: "$liked" },
+          numberOfDislikes: { $size: "$disliked" },
+        },
+      },
+      { $sort: { numgerOfLikes: -1, updatedAt: -1 } },
+      { $limit: 10 },
+    ]);
+
+    await Tip.populate(results, {
+      path: "relatedRecipe",
+      populate: {
+        path: "belongsToMenu",
+        model: "Menu",
+      },
+    });
+
+    await User.populate(results, {
+      path: "creator",
+    });
+
+    return results;
+  }
+  
   async getTipsByRecipeId({ recipe_id }) {
     const tipsByRecipeId = await this.tipModel
       .find({ relatedRecipe: recipe_id })
