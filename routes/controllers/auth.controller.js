@@ -8,8 +8,8 @@ exports.findUser = async (req, res, next) => {
 };
 
 exports.createUser = async (req, res, next) => {
-  const { nickname, email } = req.body;
-  const user = await UserService.createUser({ nickname, email });
+  const { nickname, email, picture } = req.body;
+  const user = await UserService.createUser({ nickname, email, picture });
 
   return res.send(user);
 };
