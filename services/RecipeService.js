@@ -10,6 +10,163 @@ class RecipeService {
     this.recipeModel = recipeModel;
   }
 
+  async getAllRecipes() {
+    const allRecipes = await this.recipeModel
+      .find()
+      .populate("postedBy")
+      .populate("belongsToMenu")
+      .lean();
+
+    return allRecipes;
+  }
+
+  async getRecipe(recipeId) {
+    const recipe = await this.recipeModel
+      .findById(recipeId)
+      .populate("postedBy")
+      .populate("belongsToMenu")
+      .populate({
+        path: "notes",
+        populate: {
+          path: "creator",
+          model: "User",
+        },
+      })
+      .populate("tips")
+      .lean();
+
+    return recipe;
+  }
+
+  async getLatestTop10Recipes() {
+    const results = await this.recipeModel.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          },
+        },
+      },
+      {
+        $project: {
+          relatedRecipe: 1,
+          creator: 1,
+          updatedAt: 1,
+          belongsToMenu: 1,
+          postedBy: 1,
+          thumbnailUrl: 1,
+          numberOfTips: { $size: "$tips" },
+          numberOfNotes: { $size: "$notes" },
+          numberOfLikes: { $size: "$liked" },
+          numberOfDislikes: { $size: "$disliked" },
+        },
+      },
+      {
+        $project: {
+          relatedRecipe: 1,
+          creator: 1,
+          updatedAt: 1,
+          belongsToMenu: 1,
+          postedBy: 1,
+          thumbnailUrl: 1,
+          numberOfTips: 1,
+          numberOfNotes: 1,
+          numberOfLikes: 1,
+          numberOfDislikes: 1,
+          rankScore: {
+            $let: {
+              vars: {
+                netLike: { $subtract: ["$numberOfLikes", "$numberOfDislikes"] },
+                numberOfTipsPlusOne: { $add: ["$numberOfTips", 1] },
+                numberOfNotesPlusOne: { $add: ["$numberOfNotes", 1] },
+              },
+              in: {
+                $multiply: [
+                  "$$netLike",
+                  "$$numberOfTipsPlusOne",
+                  "$$numberOfNotesPlusOne",
+                ],
+              },
+            },
+          },
+        },
+      },
+      { $sort: { rankScore: -1 } },
+      { $limit: 10 },
+    ]);
+
+    await Menu.populate(results, {
+      path: "belongsToMenu",
+    });
+
+    await User.populate(results, {
+      path: "postedBy",
+    });
+
+    return results;
+  }
+
+  async getTop10Recipes() {
+    const results = await this.recipeModel.aggregate([
+      {
+        $project: {
+          relatedRecipe: 1,
+          creator: 1,
+          updatedAt: 1,
+          belongsToMenu: 1,
+          postedBy: 1,
+          thumbnailUrl: 1,
+          numberOfTips: { $size: "$tips" },
+          numberOfNotes: { $size: "$notes" },
+          numberOfLikes: { $size: "$liked" },
+          numberOfDislikes: { $size: "$disliked" },
+        },
+      },
+      {
+        $project: {
+          relatedRecipe: 1,
+          creator: 1,
+          updatedAt: 1,
+          belongsToMenu: 1,
+          postedBy: 1,
+          thumbnailUrl: 1,
+          numberOfTips: 1,
+          numberOfNotes: 1,
+          numberOfLikes: 1,
+          numberOfDislikes: 1,
+          rankScore: {
+            $let: {
+              vars: {
+                netLike: { $subtract: ["$numberOfLikes", "$numberOfDislikes"] },
+                numberOfTipsPlusOne: { $add: ["$numberOfTips", 1] },
+                numberOfNotesPlusOne: { $add: ["$numberOfNotes", 1] },
+              },
+              in: {
+                $multiply: [
+                  "$$netLike",
+                  "$$numberOfTipsPlusOne",
+                  "$$numberOfNotesPlusOne",
+                ],
+              },
+            },
+          },
+        },
+      },
+      { $sort: { rankScore: -1 } },
+      { $limit: 10 },
+    ]);
+
+    await Menu.populate(results, {
+      path: "belongsToMenu",
+    });
+
+    await User.populate(results, {
+      path: "postedBy",
+    });
+
+    return results;
+  }
+
   async createNewRecipe({
     email,
     youtubeUrl,
@@ -92,34 +249,6 @@ class RecipeService {
     }
 
     await recipe.save();
-  }
-
-  async getAllRecipes() {
-    const allRecipes = await this.recipeModel
-      .find()
-      .populate("postedBy")
-      .populate("belongsToMenu")
-      .lean();
-
-    return allRecipes;
-  }
-
-  async getRecipe(recipeId) {
-    const recipe = await this.recipeModel
-      .findById(recipeId)
-      .populate("postedBy")
-      .populate("belongsToMenu")
-      .populate({
-        path: "notes",
-        populate: {
-          path: "creator",
-          model: "User",
-        },
-      })
-      .populate("tips")
-      .lean();
-
-    return recipe;
   }
 }
 

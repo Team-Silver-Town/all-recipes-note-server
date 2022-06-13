@@ -21,6 +21,18 @@ exports.getRecipe = async (req, res, next) => {
   return res.status(200).send(recipe);
 };
 
+exports.getLatestTop10Recipes = async (req, res, next) => {
+  const latestTop10Recipes = await RecipeService.getLatestTop10Recipes();
+
+  return res.status(200).send(latestTop10Recipes);
+};
+
+exports.getTop10Recipes = async (req, res, next) => {
+  const top10Recipes = await RecipeService.getTop10Recipes();
+
+  return res.status(200).send(top10Recipes);
+};
+
 exports.updateRecipeLike = async (req, res, next) => {
   const { email, recipe_id, like } = req.body;
 
