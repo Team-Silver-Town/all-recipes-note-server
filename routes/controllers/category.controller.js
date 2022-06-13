@@ -6,10 +6,10 @@ exports.getCategories = async (req, res, next) => {
   return res.status(200).send(categories);
 };
 
-//temporary
-exports.getCategory = async (req, res, next) => {
-  const category_id = req.body.category_id;
-  const categories = await CategoryService.getCategory(category_id);
+exports.getCategoryByName = async (req, res, next) => {
+  const { category_name } = req.params;
+
+  const categories = await CategoryService.getCategoryByName(category_name);
 
   return res.status(200).send(categories);
 };
