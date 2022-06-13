@@ -134,7 +134,7 @@ class NoteService {
 
     await note.save();
   }
-  
+
   async cancelNoteLike({ email, note_id, like }) {
     const note = await this.noteModel.findById(note_id);
 
