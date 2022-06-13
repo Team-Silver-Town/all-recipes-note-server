@@ -30,8 +30,6 @@ exports.createTip = async (req, res, next) => {
 exports.updateTip = async (req, res, next) => {
   const { tip_id, content } = req.body;
 
-  console.log(tip_id, content);
-
   await TipService.updateTip({ tip_id, content });
 
   return res.status(200).send("success");
