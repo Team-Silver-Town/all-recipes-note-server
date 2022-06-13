@@ -73,7 +73,6 @@ class MenuService {
   }
 
   async getMenu(menu_id) {
-    console.log("hi");
     const menu = this.menuModel.findById(menu_id).populate("recipes").lean();
 
     return menu;

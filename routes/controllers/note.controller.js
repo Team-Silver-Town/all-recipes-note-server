@@ -45,7 +45,6 @@ exports.updateNote = async (req, res, next) => {
 
 exports.deleteNote = async (req, res, next) => {
   const { note_id } = req.params;
-  console.log(note_id);
 
   await NoteService.deleteNote({ note_id });
 
