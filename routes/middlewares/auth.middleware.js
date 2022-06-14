@@ -23,7 +23,6 @@ exports.authenticate = asyncCatcher(async (req, res, next) => {
   }
 
   const token = authToken.split(" ")[1];
-  console.log(token);
 
   // firebaseUser 정보 받아오기
   let firebaseUser;
