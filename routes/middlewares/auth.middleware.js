@@ -1,14 +1,14 @@
-const ErrorResponse = require("../utils/ErrorResponse");
+const ErrorResponse = require("../../utils/ErrorResponse");
 const {
   TOKEN_DOES_NOT_EXIST,
   INVALID_TOKEN,
   UNAUTHORIZED_ACCESS,
   TOKEN_EXPIRED,
-} = require("../constants/ErrorConstants");
+} = require("../../constants/ErrorConstants");
 
-const firebase = require("../config/firebase");
-const asyncCatcher = require("../utils/asyncCatcher");
-const UserService = require("../services/UserService");
+const firebase = require("../../config/auth");
+const asyncCatcher = require("../../utils/asyncCatcher");
+const UserService = require("../../services/UserService");
 
 exports.authenticate = asyncCatcher(async (req, res, next) => {
   // token 받아오기
@@ -30,6 +30,7 @@ exports.authenticate = asyncCatcher(async (req, res, next) => {
   try {
     firebaseUser = await firebase.verifyIdToken(token);
   } catch (error) {
+    console.log(error);
     return next(new ErrorResponse(TOKEN_EXPIRED));
   }
 
