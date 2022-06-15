@@ -1,3 +1,5 @@
+const { shuffle } = require("lodash");
+
 const RecipeService = require("../../services/RecipeService");
 
 exports.createRecipe = async (req, res, next) => {
@@ -10,8 +12,9 @@ exports.createRecipe = async (req, res, next) => {
 
 exports.getRecipes = async (req, res, next) => {
   const recipes = await RecipeService.getAllRecipes();
+  const shuffleRecipes = shuffle(recipes);
 
-  return res.status(200).send(recipes);
+  return res.status(200).send(shuffleRecipes);
 };
 
 exports.getRecipe = async (req, res, next) => {
