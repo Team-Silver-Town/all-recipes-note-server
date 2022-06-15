@@ -3,9 +3,9 @@ const RecipeService = require("../../services/RecipeService");
 exports.createRecipe = async (req, res, next) => {
   const newRecipe = req.body;
 
-  await RecipeService.createNewRecipe(newRecipe);
+  const result = await RecipeService.createNewRecipe(newRecipe);
 
-  return res.status(200).send("success");
+  return res.status(200).send(result);
 };
 
 exports.getRecipes = async (req, res, next) => {
