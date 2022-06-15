@@ -221,6 +221,8 @@ class RecipeService {
 
     await mongoSession.commitTransaction();
     mongoSession.endSession();
+
+    return createdRecipe;
   }
 
   async updateRecipeLike({ email, recipe_id, like }) {
