@@ -13,6 +13,7 @@ const UserService = require("../../services/UserService");
 exports.authenticate = asyncCatcher(async (req, res, next) => {
   // token 받아오기
   const authToken = req.headers.authorization;
+  console.log(authToken);
 
   if (!authToken) {
     return next(new ErrorResponse(TOKEN_DOES_NOT_EXIST));
@@ -39,14 +40,17 @@ exports.authenticate = asyncCatcher(async (req, res, next) => {
   }
 
   // firebaseUser 정보기반으로 DB에서 user 정보 받아오기
+  console.log(firebaseUser);
 
   let user = await UserService.findUser({ email: firebaseUser.email });
 
+  console.log(user);
+
   if (!user) {
-    user = await UserService.createUser(
-      firebaseUser.email,
-      firebaseUser.nickname,
-    );
+    user = await UserService.createUser({
+      email: firebaseUser.email,
+      picture: firebaseUser.picture,
+    });
   }
 
   req.user = user;
