@@ -9,7 +9,7 @@ const envKeys = require("../config/config");
 const initiateMiddlewares = (app) => {
   app.use(
     cors({
-      origin: [envKeys.FRONTEND_URL],
+      origin: [envKeys.FRONTEND_URL, envKeys.DEPLOYED_FRONTEND_URL],
       methods: ["GET", "POST", "PATCH", "DELETE"],
     }),
   );
